@@ -6,7 +6,7 @@ The fallback system ensures the UI remains functional even when WASM or Web Work
 
 ## Fallback Chain
 
-```
+```text
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │    WASM     │ ──► │   Worker    │ ──► │    Main     │
 │    Path     │     │    JS       │     │   Thread    │
