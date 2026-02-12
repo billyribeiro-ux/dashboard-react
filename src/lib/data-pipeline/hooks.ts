@@ -38,8 +38,7 @@ export interface UseAnalyticsPipelineResult {
 export function useAnalyticsPipeline(
   options: UseAnalyticsPipelineOptions = {}
 ): UseAnalyticsPipelineResult {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { autoExecute = true, debounceMs = 100 } = options;
+  const { autoExecute: _autoExecute = true, debounceMs = 100 } = options;
 
   const [data, setData] = useState<AnalyticsResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -105,7 +104,6 @@ export function useAnalyticsPipeline(
   );
 
   const refresh = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _request: AnalyticsRequest = {
       requestId: `refresh-${Date.now()}`,
       datasetId: data?.requestId ?? '',

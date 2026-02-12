@@ -73,7 +73,7 @@ export class PipelineCache {
     return entry.response;
   }
 
-  set(key: CacheKey, response: AnalyticsResponse, ttlSeconds?: number): void {
+  set(key: CacheKey, response: AnalyticsResponse, _ttlSeconds?: number): void {
     const keyString = this.serializeKey(key);
 
     // Check memory before adding

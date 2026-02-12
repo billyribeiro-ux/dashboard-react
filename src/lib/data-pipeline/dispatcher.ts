@@ -157,12 +157,10 @@ export class PipelineDispatcher {
     this.telemetry.recordJobStart(jobId, request.requestId, mode);
 
     let response: AnalyticsResponse;
-    let usedMode = mode;
 
     try {
       // Execute with fallback chain
       response = await this.executeWithFallback(request, dataset, mode);
-      usedMode = response.metadata.pipelineMode;
     } catch (err) {
       // All fallbacks failed
       const error: PipelineError = {
@@ -449,8 +447,8 @@ export class PipelineDispatcher {
   getStatus() {
     return {
       mode: this.determinePipelineMode(
-        { requestedMetrics: [] } as AnalyticsRequest,
-        { points: [] } as Dataset
+        { requestedMetrics: [] } as unknown as AnalyticsRequest,
+        { points: [] } as unknown as Dataset
       ),
       initialized: this.isClient,
       wasmReady: this.wasmAdapter?.isReady() ?? false,

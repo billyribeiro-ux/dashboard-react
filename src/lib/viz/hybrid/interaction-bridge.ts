@@ -6,11 +6,7 @@
 
 import type {
   Renderer,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  RendererTier,
   DataPoint,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  SeriesData,
   HitTestResult,
   InteractionState,
   TooltipState,
@@ -241,9 +237,7 @@ export class InteractionBridge {
     if (!this.container || !this.renderer) return;
 
     const rect = this.container.getBoundingClientRect();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _x = e.clientX - rect.left;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _y = e.clientY - rect.top;
 
     // Reset zoom on double-click
@@ -404,7 +398,6 @@ export class InteractionBridge {
   // KEYBOARD NAVIGATION
   // ============================================================================
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private navigateByKeyboard(_direction: string): void {
     // In a real implementation, this would navigate between data points
     // For now, it's a placeholder

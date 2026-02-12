@@ -166,21 +166,21 @@ export class WasmAggregationAdapter {
 
     switch (agg.function) {
       case 'sum':
-        return exports.sum_f64?.(ptr, length) ?? this.jsFallback(values);
+        return exports.sum_f64?.(ptr, length) ?? 0;
       case 'mean':
-        return exports.mean_f64?.(ptr, length) ?? this.jsFallback(values);
+        return exports.mean_f64?.(ptr, length) ?? 0;
       case 'min':
-        return exports.min_f64?.(ptr, length) ?? this.jsFallback(values);
+        return exports.min_f64?.(ptr, length) ?? 0;
       case 'max':
-        return exports.max_f64?.(ptr, length) ?? this.jsFallback(values);
+        return exports.max_f64?.(ptr, length) ?? 0;
       case 'std':
-        return exports.std_f64?.(ptr, length) ?? this.jsFallback(values);
+        return exports.std_f64?.(ptr, length) ?? 0;
       case 'median':
-        return exports.median_f64?.(ptr, length) ?? this.jsFallback(values);
+        return exports.median_f64?.(ptr, length) ?? 0;
       case 'variance':
-        return exports.variance_f64?.(ptr, length) ?? this.jsFallback(values);
+        return exports.variance_f64?.(ptr, length) ?? 0;
       default:
-        return this.jsFallback(values);
+        return 0;
     }
   }
 
@@ -305,14 +305,14 @@ export class WasmAggregationAdapter {
 export function createStubWasmExports(): WebAssembly.Exports {
   // Fallback implementation when WASM is not available
   return {
-    sum_f64: (ptr: number, len: number) => 0,
-    mean_f64: (ptr: number, len: number) => 0,
-    min_f64: (ptr: number, len: number) => 0,
-    max_f64: (ptr: number, len: number) => 0,
-    std_f64: (ptr: number, len: number) => 0,
-    median_f64: (ptr: number, len: number) => 0,
-    variance_f64: (ptr: number, len: number) => 0,
-    malloc: (size: number) => 0,
-    free: (ptr: number) => {},
+    sum_f64: (_ptr: number, _len: number) => 0,
+    mean_f64: (_ptr: number, _len: number) => 0,
+    min_f64: (_ptr: number, _len: number) => 0,
+    max_f64: (_ptr: number, _len: number) => 0,
+    std_f64: (_ptr: number, _len: number) => 0,
+    median_f64: (_ptr: number, _len: number) => 0,
+    variance_f64: (_ptr: number, _len: number) => 0,
+    malloc: (_size: number) => 0,
+    free: (_ptr: number) => {},
   };
 }
