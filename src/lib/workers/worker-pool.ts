@@ -261,7 +261,7 @@ export class WorkerPool {
     }, this.config.jobTimeoutMs);
 
     // Store timeout for cleanup
-    (job as unknown as { timeoutId: number }).timeoutId = timeoutId;
+    (job as unknown as { timeoutId: ReturnType<typeof setTimeout> }).timeoutId = timeoutId;
   }
 
   private serializeDataset(dataset: Dataset): ArrayBuffer {

@@ -73,7 +73,7 @@ export const DataPointSchema = z.object({
   value: z.number(),
   category: z.string().optional(),
   series: z.string().optional(),
-  metadata: z.record(z.unknown().optional()),
+  metadata: z.record(z.string(), z.unknown()),
 });
 
 export const DatasetSchema = z.object({
@@ -171,14 +171,14 @@ export const AnalyticsRequestSchema = z.object({
 
 export const AggregateResultSchema = z.object({
   groupKey: z.string(),
-  groupValues: z.record(z.unknown().optional()),
-  metrics: z.record(z.number()),
+  groupValues: z.record(z.string(), z.unknown()),
+  metrics: z.record(z.string(), z.number()),
   count: z.number().int().nonnegative(),
 });
 
 export const TimeSeriesResultSchema = z.object({
   timestamp: z.number(),
-  values: z.record(z.number()),
+  values: z.record(z.string(), z.number()),
   count: z.number().int().nonnegative(),
 });
 
@@ -246,7 +246,7 @@ export const SegmentResultSchema = z.object({
   segmentName: z.string(),
   size: z.number().int().nonnegative(),
   percentage: z.number(),
-  aggregates: z.record(z.number()),
+  aggregates: z.record(z.string(), z.number()),
   comparison: SegmentComparisonSchema.optional(),
 });
 
@@ -274,7 +274,7 @@ export const ResponseMetadataSchema = z.object({
 export const PipelineErrorSchema = z.object({
   code: PipelineErrorCodeSchema,
   message: z.string(),
-  details: z.record(z.unknown().optional()).optional(),
+  details: z.record(z.string(), z.unknown()).optional(),
   fallbackMode: PipelineModeSchema.optional(),
   retryable: z.boolean(),
 });
