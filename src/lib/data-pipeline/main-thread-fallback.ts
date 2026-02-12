@@ -4,13 +4,21 @@
  */
 
 import type {
+   
   DataPoint,
+   
   FilterGroup,
+   
   GroupByConfig,
+   
   AggregationConfig,
+   
   AnalyticsData,
+   
   AggregateResult,
+   
   TimeSeriesResult,
+   
   DistributionResult,
 } from './types';
 
@@ -266,6 +274,7 @@ export function computeDistribution(
     bin.density = bin.count / totalCount;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const sorted = [...values].sort((a, b) => a - b);
   const mean = values.reduce((a, b) => a + b, 0) / values.length;
 

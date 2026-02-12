@@ -3,7 +3,10 @@
  * Ensures Canvas/WebGL visualizations remain accessible
  */
 
-import type { DataPoint, SeriesData, RendererTier } from './types';
+import type {
+  DataPoint,
+  SeriesData,
+} from './types';
 
 // ============================================================================
 // ACCESSIBILITY CONFIGURATION

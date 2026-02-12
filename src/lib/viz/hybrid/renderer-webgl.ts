@@ -261,7 +261,7 @@ export class WebGLRenderer implements Renderer {
     data: SeriesData[],
     xScale: RenderContext['xScale'],
     yScale: RenderContext['yScale'],
-    width: number,
+    _width: number,
     height: number
   ): void {
     if (!this.scene) return;

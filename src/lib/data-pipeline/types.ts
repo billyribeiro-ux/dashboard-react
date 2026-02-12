@@ -3,7 +3,7 @@
  * Core type definitions for workerized data processing
  */
 
-import type { z } from 'zod';
+// Note: Zod types are imported only where needed for validation
 
 // ============================================================================
 // PIPELINE MODE

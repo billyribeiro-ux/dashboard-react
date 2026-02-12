@@ -169,7 +169,7 @@ export class CanvasRenderer implements Renderer {
     this.buildSpatialIndex(data, xScale, yScale);
 
     // Render data series
-    this.renderSeries(data, xScale, yScale, innerWidth, innerHeight);
+    this.renderSeries(data, xScale, yScale);
 
     // Restore context
     this.ctx.restore();
@@ -286,9 +286,7 @@ export class CanvasRenderer implements Renderer {
   private renderSeries(
     data: SeriesData[],
     xScale: RenderContext['xScale'],
-    yScale: RenderContext['yScale'],
-    width: number,
-    height: number
+    yScale: RenderContext['yScale']
   ): void {
     if (!this.ctx) return;
 

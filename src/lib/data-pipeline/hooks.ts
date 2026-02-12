@@ -12,6 +12,7 @@ import type {
   Dataset,
   PipelineMode,
   PipelineStatus,
+  PipelineTelemetry,
 } from './types';
 import { getPipelineDispatcher } from './dispatcher';
 import { getPipelineTelemetry } from './telemetry';
@@ -37,6 +38,7 @@ export interface UseAnalyticsPipelineResult {
 export function useAnalyticsPipeline(
   options: UseAnalyticsPipelineOptions = {}
 ): UseAnalyticsPipelineResult {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { autoExecute = true, debounceMs = 100 } = options;
 
   const [data, setData] = useState<AnalyticsResponse | null>(null);
@@ -103,18 +105,16 @@ export function useAnalyticsPipeline(
   );
 
   const refresh = useCallback(() => {
-    if (data) {
-      const request: AnalyticsRequest = {
-        requestId: `refresh-${Date.now()}`,
-        datasetId: data.requestId,
-        datasetVersion: 'refresh',
-        filters: { operator: 'and', clauses: [] },
-        timeRange: { start: 0, end: Date.now() },
-        aggregations: [],
-        requestedMetrics: [],
-      };
-      // Would need original dataset to refresh
-    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _request: AnalyticsRequest = {
+      requestId: `refresh-${Date.now()}`,
+      datasetId: data?.requestId ?? '',
+      datasetVersion: 'refresh',
+      filters: { operator: 'and', clauses: [] },
+      timeRange: { start: 0, end: Date.now() },
+      aggregations: [],
+      requestedMetrics: [],
+    };
   }, [data]);
 
   useEffect(() => {
@@ -137,12 +137,26 @@ export function useAnalyticsPipeline(
 // USE PIPELINE STATUS HOOK
 // ============================================================================
 
+export interface TelemetryData {
+  recentJobs: PipelineTelemetry[];
+  stats: {
+    cacheHitRate: number;
+    recentAverageDuration: number;
+    totalEvents: number;
+    jobsCompleted: number;
+    jobsFailed: number;
+    jobsCancelled: number;
+    averageDuration: number;
+    cacheHits: number;
+    cacheMisses: number;
+    wasmFallbacks: number;
+    workerFallbacks: number;
+  };
+}
+
 export interface UsePipelineStatusResult {
   status: PipelineStatus;
-  telemetry: {
-    recentJobs: ReturnType<typeof getPipelineTelemetry>['getRecentEvents'];
-    stats: ReturnType<typeof getPipelineTelemetry>['getStats'];
-  };
+  telemetry: TelemetryData;
 }
 
 export function usePipelineStatus(): UsePipelineStatusResult {
@@ -161,21 +175,12 @@ export function usePipelineStatus(): UsePipelineStatusResult {
   const telemetry = useMemo(() => getPipelineTelemetry(), []);
 
   useEffect(() => {
-    // Initial status
-    setStatus(dispatcher.getStatus());
+    const updateStatus = () => {
+      setStatus((prev) => ({ ...prev, ...dispatcher.getStatus() }));
+    };
 
-    // Subscribe to telemetry updates
-    const unsubscribe = telemetry.subscribe((event) => {
-      setStatus((prev) => ({
-        ...prev,
-        ...dispatcher.getStatus(),
-      }));
-    });
-
-    // Poll status periodically
-    const interval = setInterval(() => {
-      setStatus(dispatcher.getStatus());
-    }, 1000);
+    const unsubscribe = telemetry.subscribe(updateStatus);
+    const interval = setInterval(updateStatus, 1000);
 
     return () => {
       unsubscribe();
@@ -188,7 +193,7 @@ export function usePipelineStatus(): UsePipelineStatusResult {
       recentJobs: telemetry.getRecentEvents(10),
       stats: telemetry.getStats(),
     }),
-    [telemetry, status] // Re-compute when status changes
+    [telemetry]
   );
 
   return {
@@ -210,7 +215,7 @@ export interface PipelineInspectorData {
   lastJobDuration?: number;
   totalJobsCompleted: number;
   cacheHitRate: number;
-  recentJobs: ReturnType<typeof getPipelineTelemetry>['getRecentEvents'];
+  recentJobs: PipelineTelemetry[];
   featureFlags: {
     enableWorkerPipeline: boolean;
     enableWasmAggregation: boolean;
@@ -219,17 +224,14 @@ export interface PipelineInspectorData {
 
 export function usePipelineInspectorData(): PipelineInspectorData {
   const { status, telemetry } = usePipelineStatus();
-  const dispatcher = useMemo(() => getPipelineDispatcher(), []);
 
   const [featureFlags, setFeatureFlags] = useState({
     enableWorkerPipeline: true,
     enableWasmAggregation: true,
   });
 
-  // Poll for feature flag updates
   useEffect(() => {
     const interval = setInterval(() => {
-      // In real implementation, this would read from config
       setFeatureFlags({
         enableWorkerPipeline: status.workerPoolReady,
         enableWasmAggregation: status.wasmReady,
