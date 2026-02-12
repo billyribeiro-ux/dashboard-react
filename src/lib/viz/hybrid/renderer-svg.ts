@@ -155,7 +155,7 @@ export class SVGRenderer implements Renderer {
     this.renderAxes(xScale, yScale, innerWidth, innerHeight);
 
     // Render data series
-    this.renderSeries(data, xScale, yScale, innerWidth, innerHeight);
+    this.renderSeries(data, xScale, yScale);
 
     // Update frame metrics
     const endTime = performance.now();
@@ -201,9 +201,7 @@ export class SVGRenderer implements Renderer {
   private renderSeries(
     data: SeriesData[],
     xScale: RenderContext['xScale'],
-    yScale: RenderContext['yScale'],
-    _width: number,
-    _height: number
+    yScale: RenderContext['yScale']
   ): void {
     if (!this.dataGroup) return;
 
